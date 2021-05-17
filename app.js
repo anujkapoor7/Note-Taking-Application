@@ -75,35 +75,8 @@ app.get('/modify' ,(req, res) => {
     })
 })
 
-app.get('/add/*', (req, res) => {
-    res.send({
-        title: '404',
-        errorMessage: 'Operation does not exist'
-    })
-})
 
-app.get('/remove/*', (req, res) => {
-    res.send({
-        title: '404',
-        errorMessage: 'Operation does not exist'
-    })
-})
-
-app.get('/list/*', (req, res) => {
-    res.send({
-        title: '404',
-        errorMessage: 'Operation does not exist'
-    })
-})
-
-app.get('/modify/*', (req, res) => {
-    res.send({
-        title: '404',
-        errorMessage: 'Operation does not exist'
-    })
-})
-
-app.get('/read/*', (req, res) => {
+app.get(['/add/*','/remove/*','/read/*','/modify/*','/list/*'], (req, res) => {
     res.send({
         title: '404',
         errorMessage: 'Operation does not exist'
