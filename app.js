@@ -1,7 +1,6 @@
 const express = require('express')
 const notes = require('./notes.js')
 
-
 const app = express()
 
 app.get('', (req, res) => {
@@ -11,78 +10,103 @@ app.get('', (req, res) => {
     })
 })
 
-app.get('/note', (req, res) => {
-    if(req.query.op === 'add'){
-        if(!req.query.title){
-            return res.send({
-                error: 'Please enter the title'
-            })
-        }
-        if(!req.query.body){
-            return res.send({
-                error: 'Please enter the body'
-            })
-        }
-        const note = notes.addNote(req.query.title, req.query.body)
+app.get('/add', (req,res) => {
+    if(!req.query.title){
         return res.send({
+            error: 'Please enter the title'
+        })
+    }
+    if(!req.query.body){
+        return res.send({
+            error: 'Please enter the body'
+        })
+    }
+    const note = notes.addNote(req.query.title, req.query.body)
+    return res.send({
+    Operation: note
+    })
+})
+
+app.get('/remove', (req, res) => {
+    if(!req.query.title){
+        return res.send({
+            error: 'Please enter the title of the note to delete'
+        })
+    }
+
+    const note = notes.removeNote(req.query.title)
+    return res.send({
         Operation: note
     })
-    } else if (req.query.op == 'remove'){
-        if(!req.query.title){
-            return res.send({
-                error: 'Please enter the title of the note to delete'
-            })
-        }
+})
 
-        const note = notes.removeNote(req.query.title)
-        return res.send({
-            Operation: note
-        })
-    } else if (req.query.op === 'list'){
-        const note = notes.listNotes()
+app.get('/list', (req, res) => {
+    const note = notes.listNotes()
         res.send({
             YourNotes: note
         })
-    } else if (req.query.op === 'read'){
-        if(!req.query.title){
-            return res.send({
-                error: 'Please enter the title of the note to read its body'
-            })
-        }
-        const Note = notes.readNode(req.query.title)
-        return res.send({Note})
-    } else if (req.query.op === 'modify'){
-        if(!req.query.title){
-            return res.send({
-                error: 'Please enter the title'
-            })
-        }
-        if(!req.query.body){
-            return res.send({
-                error: 'Please enter the body'
-            })
-        }
-
-        const note = notes.modifyNote(req.query.title, req.query.body)
-        return res.send({
-            Operation: note
-        })
-    } else {
-        res.send({
-            error: 'The operation entered does not exist'
-        })
-    }
-    // res.send({
-    //     Operation: req.query.op,
-    //     Title: req.query.title,
-    //     Body: req.query.body
-    // })
 })
 
-app.get('/note/*', (req, res)=> {
+app.get('/read', (req, res) => {
+    if(!req.query.title){
+        return res.send({
+            error: 'Please enter the title of the note to read its body'
+        })
+    }
+    const Note = notes.readNode(req.query.title)
+    return res.send({Note})
+})
+
+app.get('/modify' ,(req, res) => {
+    if(!req.query.title){
+        return res.send({
+            error: 'Please enter the title'
+        })
+    }
+    if(!req.query.body){
+        return res.send({
+            error: 'Please enter the body'
+        })
+    }
+
+    const note = notes.modifyNote(req.query.title, req.query.body)
+    return res.send({
+        Operation: note
+    })
+})
+
+app.get('/add/*', (req, res) => {
     res.send({
         title: '404',
-        errorMessage: 'Note operation does not exist'
+        errorMessage: 'Operation does not exist'
+    })
+})
+
+app.get('/remove/*', (req, res) => {
+    res.send({
+        title: '404',
+        errorMessage: 'Operation does not exist'
+    })
+})
+
+app.get('/list/*', (req, res) => {
+    res.send({
+        title: '404',
+        errorMessage: 'Operation does not exist'
+    })
+})
+
+app.get('/modify/*', (req, res) => {
+    res.send({
+        title: '404',
+        errorMessage: 'Operation does not exist'
+    })
+})
+
+app.get('/read/*', (req, res) => {
+    res.send({
+        title: '404',
+        errorMessage: 'Operation does not exist'
     })
 })
 
