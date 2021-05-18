@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const addNote = (title, body) => {
+const addNote = (title, body, callback) => {
     const notes = loadNotes()
     const duplicatenote = notes.find((note) => note.title  === title)
 
@@ -10,47 +10,47 @@ const addNote = (title, body) => {
             body: body
         })
         saveNotes(notes)
-        return 'Note Added Successfully'
+        callback ('Note Added Successfully')
     }else{
-        return 'Note Title Taken'
+        callback ('Note Title Taken')
     }    
     
 }
 
-const removeNote = (title) => {
+const removeNote = (title, callback) => {
     const notes = loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
 
     if (notes.length>notesTokeep.length){
             saveNotes(notesTokeep)
-            return 'Note removed!'
+            callback ('Note removed!')
     }else{
-            return 'No note exist with this name, try again'
+            callback ('No note exist with this name, try again')
     }
 }
 
-const listNotes = () => {
+const listNotes = (callback) => {
     const  notes = loadNotes()
     const notelist = []
     notes.forEach((note) => {
         notelist.push(note.title)
     })
-    return notelist
+    callback (notelist)
 }
 
-const readNode = (title) => {
+const readNode = (title, callback) => {
     const notes = loadNotes()
     const note = notes.find((note) => note.title === title)
 
     if(note){
-        return note
+        callback (note, undefined)
     }else{
-        return 'This note does not exist, Try Another note'
+        callback (undefined, 'This note does not exist, Try Another note')
     }
 
 }
 
-const modifyNote = (title, body) => {
+const modifyNote = (title, body, callback) => {
     const notes = loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
     const note = notes.find((note) => note.title === title)
@@ -61,9 +61,9 @@ const modifyNote = (title, body) => {
             body: body
         })
         saveNotes(notesTokeep)
-        return 'Note Modified Successfully'
+        callback ('Note Modified Successfully')
     }else {
-        return 'Note not found, try again'
+        callback ('Note not found, try again')
     }
 }
 

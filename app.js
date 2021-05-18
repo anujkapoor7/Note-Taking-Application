@@ -21,9 +21,10 @@ app.get('/add', (req,res) => {
             error: 'Please enter the body'
         })
     }
-    const note = notes.addNote(req.query.title, req.query.body)
-    return res.send({
-    Operation: note
+    notes.addNote(req.query.title, req.query.body, (note) => {
+        res.send({
+            Operation: note
+        })
     })
 })
 
@@ -34,17 +35,19 @@ app.get('/remove', (req, res) => {
         })
     }
 
-    const note = notes.removeNote(req.query.title)
-    return res.send({
-        Operation: note
+    notes.removeNote(req.query.title, (note) => {
+        res.send({
+            Operation: note
+        })
     })
 })
 
 app.get('/list', (req, res) => {
-    const note = notes.listNotes()
+    notes.listNotes((note) => {
         res.send({
             YourNotes: note
         })
+    })
 })
 
 app.get('/read', (req, res) => {
@@ -53,8 +56,12 @@ app.get('/read', (req, res) => {
             error: 'Please enter the title of the note to read its body'
         })
     }
-    const Note = notes.readNode(req.query.title)
-    return res.send({Note})
+    notes.readNode(req.query.title, (Note, error) => {
+        if(error){
+            return res.send({error})
+        }
+        res.send({Note})
+    })
 })
 
 app.get('/modify' ,(req, res) => {
@@ -69,9 +76,10 @@ app.get('/modify' ,(req, res) => {
         })
     }
 
-    const note = notes.modifyNote(req.query.title, req.query.body)
-    return res.send({
-        Operation: note
+    notes.modifyNote(req.query.title, req.query.body, (note) => {
+        res.send({
+            Operation: note
+        })
     })
 })
 
