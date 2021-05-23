@@ -1,7 +1,11 @@
 const fs = require('fs')
+const { promisify } = require('util')
+const readFileAsync = promisify(fs.readFile)
+const writeFileASync = promisify(fs.writeFile)
 
-const addNote = (title, body, callback) => {
-    const notes = loadNotes()
+
+const addNote = async(title, body) => {
+    const notes = await loadNotes()
     const duplicatenote = notes.find((note) => note.title  === title)
 
     if(!duplicatenote){
@@ -10,48 +14,48 @@ const addNote = (title, body, callback) => {
             body: body
         })
         saveNotes(notes)
-        callback ('Note Added Successfully')
+        return ('Note Added Successfully')
     }else{
-        callback ('Note Title Taken')
+        return ('Note Title Taken')
     }    
     
 }
 
-const removeNote = (title, callback) => {
-    const notes = loadNotes()
+const removeNote = async(title) => {
+    const notes = await loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
 
     if (notes.length>notesTokeep.length){
             saveNotes(notesTokeep)
-            callback ('Note removed!')
+            return 'Note removed!'
     }else{
-            callback ('No note exist with this name, try again')
+            return 'No note exist with this name, try again'
     }
 }
 
-const listNotes = (callback) => {
-    const  notes = loadNotes()
+const listNotes = async() => {
+    const  notes = await loadNotes()
     const notelist = []
     notes.forEach((note) => {
         notelist.push(note.title)
     })
-    callback (notelist)
+    return notelist
 }
 
-const readNode = (title, callback) => {
-    const notes = loadNotes()
+const readNode = async(title) => {
+    const notes = await loadNotes()
     const note = notes.find((note) => note.title === title)
 
     if(note){
-        callback (note, undefined)
+        return (note)
     }else{
-        callback (undefined, 'This note does not exist, Try Another note')
+        return (undefined)
     }
 
 }
 
-const modifyNote = (title, body, callback) => {
-    const notes = loadNotes()
+const modifyNote = async(title, body) => {
+    const notes = await loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
     const note = notes.find((note) => note.title === title)
 
@@ -60,21 +64,21 @@ const modifyNote = (title, body, callback) => {
             title: title,
             body: body
         })
-        saveNotes(notesTokeep)
-        callback ('Note Modified Successfully')
+        await saveNotes(notesTokeep)
+        return ('Note Modified Successfully')
     }else {
-        callback ('Note not found, try again')
+        return ('Note not found, try again')
     }
 }
 
-const saveNotes = (notes) => {
+const saveNotes = async(notes) => {
     const dataJSON = JSON.stringify(notes)
-    fs.writeFileSync('notes.json',dataJSON)
+    await writeFileASync('notes.json',dataJSON)
 }
 
-const loadNotes = () => {
+const loadNotes = async() => {
     try{
-        const dataBuffer = fs.readFileSync('notes.json')
+        const dataBuffer = await readFileAsync('notes.json')
         const dataJSON = dataBuffer.toString()
         return JSON.parse(dataJSON)
     }catch (e){

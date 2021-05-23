@@ -3,6 +3,9 @@ const notes = require('./notes.js')
 
 const app = express()
 
+app.use(express.urlencoded({extended : false}))
+
+
 app.get('', (req, res) => {
     res.send({
         Project: 'Note Taking Application',
@@ -10,88 +13,95 @@ app.get('', (req, res) => {
     })
 })
 
-app.get('/add', (req,res) => {
-    if(!req.query.title){
+app.post('/add', async(req,res) => {
+    if(!req.body.title){
         return res.send({
             error: 'Please enter the title'
         })
     }
-    if(!req.query.body){
+    if(!req.body.body){
         return res.send({
             error: 'Please enter the body'
         })
     }
-    notes.addNote(req.query.title, req.query.body, (note) => {
-        res.send({
-            Operation: note
-        })
+    const note = await notes.addNote(req.body.title, req.body.body)
+    res.send({
+        Operation: note
     })
 })
 
-app.get('/remove', (req, res) => {
-    if(!req.query.title){
+app.post('/remove', async(req, res) => {
+    if(!req.body.title){
         return res.send({
             error: 'Please enter the title of the note to delete'
         })
     }
 
-    notes.removeNote(req.query.title, (note) => {
-        res.send({
-            Operation: note
-        })
+    const note = await notes.removeNote(req.body.title)
+    res.send({
+        Operation: note
     })
 })
 
-app.get('/list', (req, res) => {
-    notes.listNotes((note) => {
-        res.send({
-            YourNotes: note
-        })
+app.get('/list', async(req, res) => {
+    const note = await notes.listNotes()
+    res.send({
+        YourNotes: note
     })
 })
 
-app.get('/read', (req, res) => {
+app.get('/read', async(req, res) => {
     if(!req.query.title){
         return res.send({
             error: 'Please enter the title of the note to read its body'
         })
     }
-    notes.readNode(req.query.title, (Note, error) => {
-        if(error){
-            return res.send({error})
-        }
-        res.send({Note})
+
+    const note = await notes.readNode(req.query.title)
+    if(note === undefined)
+    {
+        return res.send({
+            error: 'This note does not found, try again'
+        })
+    }
+    return res.send({
+        YourNotes: note
     })
+    // await notes.readNode(req.query.title, (Note, error) => {
+    //     if(error){
+    //         return res.send({error})
+    //     }
+    //     res.send({Note})
+    // })
 })
 
-app.get('/modify' ,(req, res) => {
-    if(!req.query.title){
+app.post('/modify' , async(req, res) => {
+    if(!req.body.title){
         return res.send({
             error: 'Please enter the title'
         })
     }
-    if(!req.query.body){
+    if(!req.body.body){
         return res.send({
             error: 'Please enter the body'
         })
     }
 
-    notes.modifyNote(req.query.title, req.query.body, (note) => {
-        res.send({
-            Operation: note
-        })
-    })
-})
-
-
-app.get(['/add/*','/remove/*','/read/*','/modify/*','/list/*'], (req, res) => {
+    const note = await notes.modifyNote(req.body.title,req.body.body)
     res.send({
-        title: '404',
-        errorMessage: 'Operation does not exist'
+        Operation: note
     })
 })
+
 
 app.get('*', (req, res) => {
+    res.send({
+        title: '404',
+        errorMessage: 'Page Not Found'
+    })
+})
+
+app.post('*', (req, res) => {
     res.send({
         title: '404',
         errorMessage: 'Page Not Found'
