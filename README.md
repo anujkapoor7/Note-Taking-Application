@@ -19,8 +19,9 @@ after performing above given steps to use this application follow the further re
 
 To use any of the given ooperation use URL as follows
 
-```1. To add note : localhost:3001/add
+```
+1. To add note : localhost:3001/add
 2. To remove note : localhost:3001/remove
 3. To list note : localhost:3001/list
-5. To modify note : localhost:3001/modify
+4. To modify note : localhost:3001/modify
 ```
