@@ -1,4 +1,4 @@
-[[Note Taking Application]]
+  [Note Taking Application]
 Write APIs to create a note taking application.
 - All notes are to be written to a JSON file.
 - One should be able to add new notes to the file, modify already written notes, delete notes and get all notes.
