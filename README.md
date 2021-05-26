@@ -1,4 +1,4 @@
-Note Taking Application
+[[Note Taking Application]]
 Write APIs to create a note taking application.
 - All notes are to be written to a JSON file.
 - One should be able to add new notes to the file, modify already written notes, delete notes and get all notes.
@@ -19,8 +19,9 @@ after performing above given steps to use this application follow the further re
 
 To use any of the given ooperation use URL as follows
 
-1. To add note : localhost:3001/add?title=Anuj Kapoor&body=Software Engineering Intern at SpringWorks
+```1. To add note : localhost:3001/add?title=Anuj Kapoor&body=Software Engineering Intern at SpringWorks
 2. To remove note : localhost:3001/remove?title=Anuj Kapoor
 3. To list note : localhost:3001/list
 4. To read note : localhost:3001/read?title=Anuj Kapoor
 5. To modify note : localhost:3001/modify?title=Anuj Kapoor&body=Student at Chandigarh University
+```
