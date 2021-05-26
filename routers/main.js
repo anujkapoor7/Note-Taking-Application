@@ -26,9 +26,10 @@ router.get('', (req, res) => {
 router.post('/add', params, errorMsghere, async(req, res) => {
     try {
     const note = await notes.addNote(req.body.title, req.body.body)
-    res.send({
-        Operation: note
+    res.status(note.status).send({
+        Operation: note.Message
     })
+    console.log(note)
     } catch (e){
         console.log(e)
     }
@@ -38,9 +39,10 @@ router.post('/add', params, errorMsghere, async(req, res) => {
 router.put('/remove' , paramstitle, errorMsghere ,async(req, res, next) => {
     try {
     const note = await notes.removeNote(req.body.title)
-    res.send({
-        Operation: note
+    res.status(note.status).send({
+        Operation: note.Message
     })
+    console.log(note)
     } catch (e){
         console.log(e)
     }
@@ -49,8 +51,8 @@ router.put('/remove' , paramstitle, errorMsghere ,async(req, res, next) => {
 router.get('/list', async(req, res) => {
     try{
     const note = await notes.listNotes()
-    res.status(200).send({
-        note: note
+    res.status(note.status).send({
+        note: note.notes
     })
     }catch(e)
     {
@@ -62,8 +64,8 @@ router.get('/list', async(req, res) => {
 router.put('/modify' , params, errorMsghere,async(req, res) => {
     try{
     const note = await notes.modifyNote(req.body.title,req.body.body)
-    res.send({
-        Operation: note
+    res.status(note.status).send({
+        Operation: note.Message
     })
     } catch(e){
         console.log(e)

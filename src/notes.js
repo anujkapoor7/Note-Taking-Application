@@ -15,9 +15,15 @@ const addNote = async(title, body) => {
             body: body
         })
         saveNotes(notes)
-        return ('Note Added Successfully')
+        return ({
+            status: 200,
+            Message: 'Note Added Successfully'
+        })
     }else{
-        return ('Note Title Taken')
+        return ({
+            status: 501,
+            Message: 'Note Title Taken'
+        })
     }   
     }catch(e){
         console.log(e)
@@ -32,9 +38,15 @@ const removeNote = async(title) => {
 
     if (notes.length>notesTokeep.length){
             saveNotes(notesTokeep)
-            return 'Note removed!'
+            return ({
+                status: 200,
+                Message: 'Note Removed Successfully'
+            })
     }else{
-            return 'No note exist with this name, try again'
+            return ({
+                status: 501,
+                Message: 'No note exist with this name, try another note'
+            })
     }
     } catch(e){
         console.log(e)
@@ -44,9 +56,15 @@ const removeNote = async(title) => {
 const listNotes = async() => {
     try{
     const  notes = await loadNotes()
-    return notes
+    return ({
+        status: 200,
+        notes: notes
+    })
     } catch(e){
-        console.log(e)
+        return ({
+            status: 20,
+            notes: notes
+        })
     }
 }
 
@@ -78,9 +96,15 @@ const modifyNote = async(title, body) => {
             body: body
         })
         await saveNotes(notesTokeep)
-        return ('Note Modified Successfully')
+        return ({
+            status: 200,
+            Message: 'Note Modified Successfully'
+        })
     }else {
-        return ('Note not found, try again')
+        return ({
+            status: 501,
+            Message: 'No note exist with this name, try another note'
+        })
     }
     } catch(e){
         console.log(e)
