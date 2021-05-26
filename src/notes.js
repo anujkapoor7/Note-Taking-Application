@@ -5,6 +5,7 @@ const writeFileASync = promisify(fs.writeFile)
 
 
 const addNote = async(title, body) => {
+    try{
     const notes = await loadNotes()
     const duplicatenote = notes.find((note) => note.title  === title)
 
@@ -17,11 +18,15 @@ const addNote = async(title, body) => {
         return ('Note Added Successfully')
     }else{
         return ('Note Title Taken')
-    }    
+    }   
+    }catch(e){
+        console.log(e)
+    } 
     
 }
 
 const removeNote = async(title) => {
+    try{
     const notes = await loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
 
@@ -31,14 +36,22 @@ const removeNote = async(title) => {
     }else{
             return 'No note exist with this name, try again'
     }
+    } catch(e){
+        console.log(e)
+    }
 }
 
 const listNotes = async() => {
+    try{
     const  notes = await loadNotes()
     return notes
+    } catch(e){
+        console.log(e)
+    }
 }
 
 const readNode = async(title) => {
+    try{
     const notes = await loadNotes()
     const note = notes.find((note) => note.title === title)
 
@@ -47,10 +60,14 @@ const readNode = async(title) => {
     }else{
         return (undefined)
     }
+    } catch(e){
+        console.log(e)
+    }
 
 }
 
 const modifyNote = async(title, body) => {
+    try{
     const notes = await loadNotes()
     const notesTokeep = notes.filter((note) => note.title !== title)
     const note = notes.find((note) => note.title === title)
@@ -65,11 +82,18 @@ const modifyNote = async(title, body) => {
     }else {
         return ('Note not found, try again')
     }
+    } catch(e){
+        console.log(e)
+    }
 }
 
 const saveNotes = async(notes) => {
+    try{
     const dataJSON = JSON.stringify(notes)
     await writeFileASync('notes.json',dataJSON)
+    } catch(e){
+        console.log(e)
+    }
 }
 
 const loadNotes = async() => {
