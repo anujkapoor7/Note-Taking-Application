@@ -35,11 +35,7 @@ const removeNote = async(title) => {
 
 const listNotes = async() => {
     const  notes = await loadNotes()
-    const notelist = []
-    notes.forEach((note) => {
-        notelist.push(note.title)
-    })
-    return notelist
+    return notes
 }
 
 const readNode = async(title) => {
